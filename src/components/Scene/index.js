@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Answers from "../Answers";
 
 const QAMatrix = [
   {
@@ -15,46 +16,30 @@ const QAMatrix = [
 
 export default function Scene() {
   const [hasGuessed, setHasGuessed] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
   const [currentQNumber, setCurrentQNumber] = useState(0);
-  console.log(hasGuessed);
-
-  function handleClick(e) {
-    setHasGuessed(true);
-  }
 
   function handleNextClick(e) {
+    if (currentQNumber >= QAMatrix.length - 1) setIsCompleted(true);
     setHasGuessed(false);
-    setCurrentQNumber(currentQNumber)
-  }
-
-  function randomize(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var temp = array[i];
-      array[i] = array[j];
-      array[j] = temp;
-    }
-    return array
+    setCurrentQNumber(currentQNumber + 1);
   }
 
   return (
     <>
       <div className="question">{QAMatrix[currentQNumber].question}</div>
-      <div className="answers">
-        {randomize([
-          <button
-            className="answers"
-            style={{ backgroundColor: hasGuessed ? "green" : "grey" }}
-            onClick={handleClick}
-          >
-            answer1
-          </button>,
-          <button>answer2</button>,
-          <button>answer3</button>,
-          <button>answer4</button>,
-        ])}
-      </div>
-      {hasGuessed && <button onClick={handleNextClick}>next Q</button>}
+
+      <Answers
+        currentQNumber={currentQNumber}
+        QAMatrix={QAMatrix}
+        hasGuessed={hasGuessed}
+        setHasGuessed={setHasGuessed}
+      />
+      {isCompleted ? (
+        <h2>Finished</h2>
+      ) : (
+        hasGuessed && <button onClick={handleNextClick}>next Q</button>
+      )}
     </>
   );
 }
