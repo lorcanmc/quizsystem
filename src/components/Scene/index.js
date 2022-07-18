@@ -22,8 +22,9 @@ const QAMatrix = [
 ];
 
 export default function Scene() {
+  const [score, setScore] = useState(0);
+  console.log(score)
   const [hasGuessed, setHasGuessed] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(false);
   const [currentQNumber, setCurrentQNumber] = useState(0);
 
   function handleNextClick(e) {
@@ -37,6 +38,7 @@ export default function Scene() {
 
   return (
     <>
+      <h2>Score: {score}</h2>
       <div className={css.question}>{QAMatrix[currentQNumber].question}</div>
 
       <Answers
@@ -44,6 +46,7 @@ export default function Scene() {
         QAMatrix={QAMatrix}
         hasGuessed={hasGuessed}
         setHasGuessed={setHasGuessed}
+        setScore={setScore}
       />
       {hasGuessed && currentQNumber >= QAMatrix.length - 1 ? (
         <h2>Finished</h2>

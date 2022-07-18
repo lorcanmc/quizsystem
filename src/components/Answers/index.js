@@ -1,10 +1,14 @@
+import { setSelectionRange } from "@testing-library/user-event/dist/utils";
 import { useState, useEffect } from "react";
+
+import css from "./answers.module.css";
 
 export default function Answers({
   currentQNumber,
   QAMatrix,
   hasGuessed,
   setHasGuessed,
+  setScore,
 }) {
   const [answers, setAnswers] = useState();
 
@@ -23,7 +27,11 @@ export default function Answers({
   }, [currentQNumber, QAMatrix]);
 
   function handleClick(e) {
+    console.log(e);
     setHasGuessed(true);
+    if (e.target.value === "true") {
+      setScore((prevState) => prevState + 1);
+    }
   }
 
   // randomizes an array
@@ -39,14 +47,17 @@ export default function Answers({
 
   if (answers) {
     return (
-      <div className="answers">
+      <div className={css.answers}>
         {answers.map((obj) => {
           return (
             <button
+              className={css.answer}
               style={{
                 backgroundColor:
-                  hasGuessed && obj.correct === true ? "green" : "grey",
+                  hasGuessed && obj.correct === true ? "green" : "white",
               }}
+              value={obj.correct}
+              disabled= {hasGuessed} 
               onClick={handleClick}
             >
               {obj.answer}
